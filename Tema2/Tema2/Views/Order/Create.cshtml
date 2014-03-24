@@ -1,49 +1,53 @@
-﻿@model Tema2.Database.Entitati.Order
+﻿@model Tema2.Models.OrderModel
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Creare";
 }
 
-<h2>Create</h2>
+<h2>Creare</h2>
 
 
 @using (Html.BeginForm()) 
 {
-    @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
         <h4>Order</h4>
         <hr />
-        @Html.ValidationSummary(true)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Date, new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Order.Date, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Date)
-                @Html.ValidationMessageFor(model => model.Date)
+                @Html.EditorFor(model => model.Order.Date)
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Value, new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Order.Value, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Value)
-                @Html.ValidationMessageFor(model => model.Value)
+                @Html.EditorFor(model => model.Order.Value)
+            </div>
+        </div>
+
+    <div class="form-group">
+            @Html.LabelFor(model => model.Order.Customer, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Order.Customer.CustomerId,
+                                        Model.CustomerList,
+                                        "Alege customer")
             </div>
         </div>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Creare" class="btn btn-default" />
             </div>
         </div>
     </div>
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Înapoi la listă", "Index")
 </div>
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+
+

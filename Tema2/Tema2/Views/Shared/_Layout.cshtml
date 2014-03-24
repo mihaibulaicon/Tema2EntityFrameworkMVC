@@ -6,22 +6,19 @@
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-
+    @Scripts.Render("~/bundles/jquery")
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-            </div>
+     
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li class="nav-pills">
-                        @Html.ActionLink("Customers",controllerName:"Customer", actionName:"Index")
+                    <li class="nav-pills" style="font-size:large">
+                        @Html.ActionLink("Customers",controllerName:"Customer", actionName:"ListCustomer")
+                    </li>
+<li class="nav-pills" style="font-size:large">
+                        @Html.ActionLink("Orders",controllerName:"Order", actionName:"Index")
                     </li>
                 </ul>
               
@@ -36,7 +33,7 @@
         </footer>
     </div>
 
-    @Scripts.Render("~/bundles/jquery")
+    
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 </body>

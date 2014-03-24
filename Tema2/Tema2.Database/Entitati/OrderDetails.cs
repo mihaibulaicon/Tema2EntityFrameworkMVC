@@ -9,7 +9,7 @@ namespace Tema2.Database.Entitati
 {
     public class OrderDetails
     {
-        public int Id { get; set; }
+        public int OrderDetailsId { get; set; }
 
         [Key, ForeignKey("Order")]
         public int OrderId { get; set; }

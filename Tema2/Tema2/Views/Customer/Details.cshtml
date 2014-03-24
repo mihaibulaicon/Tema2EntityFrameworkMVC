@@ -1,10 +1,10 @@
 ﻿@model Tema2.Database.Entitati.Customer
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Detalii";
 }
 
-<h2>Details</h2>
+<h2>Detalii</h2>
 
 <div>
     <h4>Customer</h4>
@@ -26,9 +26,34 @@
             @Html.DisplayFor(model => model.Address)
         </dd>
 
+        <dt style="color:green">
+            Orders:
+        </dt>
+        <dd>
+       
+        </dd>
+ <div style="position:relative;left:70px;width:300px">
+        @foreach (var item in Model.Orders) {
+         <dt>
+            Date:
+        </dt>
+        <dd>
+             @Html.DisplayFor(modelItem => item.Date)
+           </dd>
+       <dt>
+            Value:
+        </dt>
+         <dd>
+             @Html.DisplayFor(modelItem => item.Value)
+            </dd>
+<hr />
+        }
+</div>
+     
+
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Editare", "Edit", new { id = Model.CustomerId }) |
+    @Html.ActionLink("Înapoi la listă", "ListCustomer")
 </p>

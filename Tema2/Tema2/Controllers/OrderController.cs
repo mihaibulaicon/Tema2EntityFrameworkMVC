@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using Tema2.Database.Entitati;
 using Tema2.Database;
+using Tema2.Models;
 
 namespace Tema2.Controllers
 {
@@ -15,21 +16,19 @@ namespace Tema2.Controllers
     {
         private DatabaseContext db = new DatabaseContext();
 
-        // GET: /Order/
         public ActionResult Index()
         {
-            var orders = db.Orders.Include(o => o.OrderDetails);
+            var orders = db.Orders.Include(o => o.Customer).ToList();
             return View(orders.ToList());
         }
 
-        // GET: /Order/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Order order = db.Orders.Find(id);
+            Order order = db.Orders.Include(o => o.Customer).SingleOrDefault(x => x.OrderId == id);;
             if (order == null)
             {
                 return HttpNotFound();
@@ -37,65 +36,62 @@ namespace Tema2.Controllers
             return View(order);
         }
 
-        // GET: /Order/Create
         public ActionResult Create()
         {
-            ViewBag.Id = new SelectList(db.OrderDetails, "OrderId", "OrderId");
-            return View();
+            var model = new OrderModel();
+            model.Order = new Order();
+            model.Order.Date = DateTime.Now;
+            model.CustomerList = db.Customers.ToList().Select(c => new SelectListItem() { Value = c.CustomerId.ToString(), Text = c.Name }); 
+            return View(model);
         }
 
-        // POST: /Order/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="Id,Date,Value")] Order order)
+        public ActionResult Create(OrderModel model)
         {
             if (ModelState.IsValid)
             {
-                db.Orders.Add(order);
+                model.Order.Customer = db.Customers.Find(model.Order.Customer.CustomerId);
+                db.Orders.Add(model.Order);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.Id = new SelectList(db.OrderDetails, "OrderId", "OrderId", order.Id);
-            return View(order);
+            model.CustomerList = db.Customers.ToList().Select(c => new SelectListItem() { Value = c.CustomerId.ToString(), Text = c.Name }); 
+            return View(model);
         }
 
-        // GET: /Order/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Order order = db.Orders.Find(id);
-            if (order == null)
+            OrderModel model = new OrderModel();
+            model.Order=db.Orders.Find(id);
+            if (model.Order == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.Id = new SelectList(db.OrderDetails, "OrderId", "OrderId", order.Id);
-            return View(order);
+            model.CustomerList = db.Customers.ToList().Select(c => new SelectListItem() { Value = c.CustomerId.ToString(), Text = c.Name }); 
+            return View(model);
         }
 
-        // POST: /Order/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="Id,Date,Value")] Order order)
+        public ActionResult Edit(OrderModel model)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(order).State = EntityState.Modified;
+                var order = db.Orders.Find(model.Order.OrderId);
+                order.Date = model.Order.Date;
+                order.Customer = db.Customers.Find(model.Order.Customer.CustomerId);
+                order.Value = model.Order.Value;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.Id = new SelectList(db.OrderDetails, "OrderId", "OrderId", order.Id);
-            return View(order);
+            model.CustomerList = db.Customers.ToList().Select(c => new SelectListItem() { Value = c.CustomerId.ToString(), Text = c.Name }); 
+            return View(model);
         }
 
-        // GET: /Order/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -110,9 +106,7 @@ namespace Tema2.Controllers
             return View(order);
         }
 
-        // POST: /Order/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
             Order order = db.Orders.Find(id);

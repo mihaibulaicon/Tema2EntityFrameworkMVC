@@ -1,12 +1,12 @@
 ﻿@model Tema2.Database.Entitati.Customer
 
 @{
-    ViewBag.Title = "Delete";
+    ViewBag.Title = "Stergere";
 }
 
-<h2>Delete</h2>
+<h2>Ștergere</h2>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Sunteți sigur că doriți să ștergeți această înregistrare?</h3>
 <div>
     <h4>Customer</h4>
     <hr />
@@ -30,11 +30,10 @@
     </dl>
 
     @using (Html.BeginForm()) {
-        @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+            <input type="submit" value="Șterge" class="btn btn-default" /> |
+            @Html.ActionLink("Înapoi la listă", "ListCustomer")
         </div>
     }
 </div>
